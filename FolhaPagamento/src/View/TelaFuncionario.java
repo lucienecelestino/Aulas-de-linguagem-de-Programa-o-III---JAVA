@@ -1,6 +1,10 @@
 
 package View;
+
+import java.util.ArrayList;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.Funcionario;
 import model.Gerente;
 import model.Horista;
@@ -9,10 +13,42 @@ import model.Horista;
 
 public class TelaFuncionario extends javax.swing.JFrame {
 
+     // Criando a lista para guardar os objetos na memória
+    private ArrayList<Funcionario> listaFuncionarios = new ArrayList<>();
     
     public TelaFuncionario() {
     initComponents();
-
+    }
+        private void atualizarTabela() {
+    // 1. Pega o modelo (a estrutura) da tabela que está na tela
+    DefaultTableModel modelo = (DefaultTableModel) tblFuncionarios.getModel();
+    
+    // 2. Limpa a tabela antes de desenhar de novo (para não duplicar)
+    modelo.setNumRows(0);
+    
+    // 3. Percorre a nossa lista do ArrayList
+    for (Funcionario f : listaFuncionarios) {
+        
+        // Descobre qual é o cargo para colocar na coluna
+        String cargo = "Funcionário Comum";
+        if (f instanceof Gerente) {
+            cargo = "Gerente";
+        } 
+        // Se houver o Horista (Desafio 1), pode colocar um else if aqui
+       
+        else if (f instanceof Horista) {
+            cargo = "Horista";
+        } 
+        
+        
+        // 4. Adiciona uma linha nova na tabela com os dados 
+        modelo.addRow(new Object[]{
+            f.getNome(),
+            cargo,
+            "R$ " + f.calcularLiquido()
+        });
+    }
+    
     ButtonGroup grupoGerente = new ButtonGroup();
     grupoGerente.add(radioSim);
     grupoGerente.add(radioNao);
@@ -50,6 +86,8 @@ public class TelaFuncionario extends javax.swing.JFrame {
         txtValorHora = new javax.swing.JTextField();
         txtqtdHorasTrabalhadas = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblFuncionarios = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -175,23 +213,20 @@ public class TelaFuncionario extends javax.swing.JFrame {
                     .addComponent(jLabel8)
                     .addComponent(txtValorHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtqtdHorasTrabalhadas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9)
+                    .addComponent(txtqtdHorasTrabalhadas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
                     .addComponent(txtxSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(radioSim)
-                            .addComponent(radioNao))
-                        .addGap(39, 39, 39))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(29, 29, 29)))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(radioSim)
+                        .addComponent(radioNao))
+                    .addComponent(jLabel5))
+                .addGap(39, 39, 39)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4)
                     .addComponent(txtBonus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -204,15 +239,35 @@ public class TelaFuncionario extends javax.swing.JFrame {
                 .addGap(36, 36, 36))
         );
 
+        tblFuncionarios.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Nome", "Cargo", "Salário"
+            }
+        ));
+        jScrollPane1.setViewportView(tblFuncionarios);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -224,7 +279,7 @@ public class TelaFuncionario extends javax.swing.JFrame {
 
     private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
                                             
-
+try {
     String nome = txtNome.getText();
     double liquido = 0;
 
@@ -235,6 +290,7 @@ public class TelaFuncionario extends javax.swing.JFrame {
 
         Horista h = new Horista(nome, horasTrabalhadas, valorHora);
         liquido = h.calcularLiquido();
+        listaFuncionarios.add(h);
 
     } else {
 
@@ -244,14 +300,24 @@ public class TelaFuncionario extends javax.swing.JFrame {
             double bonus = Double.parseDouble(txtBonus.getText());
             Gerente g = new Gerente(nome, salario, bonus);
             liquido = g.calcularLiquido();
-        } else {
-            Funcionario f = new Funcionario(nome, salario);
-            liquido = f.calcularLiquido();
-        }
+             listaFuncionarios.add(g);
+        }  else {
+                Funcionario f = new Funcionario(nome, salario);
+                liquido = f.calcularLiquido();
+                listaFuncionarios.add(f);
     }
-
+    }
     txtResultado.setText(String.valueOf(liquido));
+  atualizarTabela();
+        
+      } catch(NumberFormatException e){
 
+        JOptionPane.showMessageDialog(null, "Erro: Salário inválido!");
+
+    } finally {
+            txtxSalario . setText ( " " ) ;
+            txtxSalario.requestFocus(); // Volta o cursor para o campo
+        }
     }//GEN-LAST:event_btnCalcularActionPerformed
 
     private void radioSimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioSimActionPerformed
@@ -323,8 +389,10 @@ public class TelaFuncionario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton radioNao;
     private javax.swing.JRadioButton radioSim;
+    private javax.swing.JTable tblFuncionarios;
     private javax.swing.JTextField txtBonus;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtResultado;
