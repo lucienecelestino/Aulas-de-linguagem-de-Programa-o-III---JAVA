@@ -21,4 +21,12 @@ public class Horista extends Funcionario{
         return bruto - inss;
          
     }
+
+    public void setHorasTrabalhadas(int horasTrabalhadas) {
+        this.horasTrabalhadas = horasTrabalhadas;
+    }
+
+    public void setValorHora(double valorHora) {
+        this.valorHora = valorHora;
+    }
 }

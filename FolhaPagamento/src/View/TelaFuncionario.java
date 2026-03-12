@@ -287,7 +287,6 @@ try {
 
         int horasTrabalhadas = Integer.parseInt(txtqtdHorasTrabalhadas.getText());
         double valorHora = Double.parseDouble(txtValorHora.getText());
-
         Horista h = new Horista(nome, horasTrabalhadas, valorHora);
         liquido = h.calcularLiquido();
         listaFuncionarios.add(h);

@@ -18,4 +18,8 @@ public class Gerente extends Funcionario {
          return (this.salarioBase + this.bonus) - super.calcularINSS();
          
     }
+
+    public void setBonus(double bonus) {
+        this.bonus = bonus;
+    }
 }
